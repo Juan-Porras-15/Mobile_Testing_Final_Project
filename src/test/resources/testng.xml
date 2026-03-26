@@ -3,6 +3,7 @@
 <suite name="Mobile Automation Suite">
     <test name="Final Project Tests">
         <classes>
+            <class name="com.globant.mobile.tests.CheckConnectionTest"/>
         </classes>
     </test>
 </suite>
