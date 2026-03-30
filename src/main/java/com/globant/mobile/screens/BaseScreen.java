@@ -3,15 +3,19 @@ package com.globant.mobile.screens;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.bidi.module.LogInspector;
+import org.openqa.selenium.interactions.PointerInput;
+import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.security.auth.login.LoginContext;
 import java.time.Duration;
+import java.util.Arrays;
 
 public class BaseScreen {
     protected AndroidDriver driver;
@@ -105,5 +109,26 @@ public class BaseScreen {
     public DragScreen clickDragIcon() {
         dragIcon.click();
         return new DragScreen(driver);
+    }
+
+    public void swipe(int startX, int startY, int endX, int endY, int milisDuration) {
+        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+        Sequence swipe = new Sequence(finger, 1);
+
+        swipe.addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY));
+        swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(150), PointerInput.Origin.viewport(), startX, startY));
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(milisDuration), PointerInput.Origin.viewport(), endX, endY));
+        swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+        driver.perform(Arrays.asList(swipe));
+    }
+
+    public void swipeHorizontal(double startPct, double endPct, double anchorPct, int milisDuration) {
+        Dimension size = driver.manage().window().getSize();
+        int anchor = (int) (size.height * anchorPct);
+        int start = (int) (size.width * startPct);
+        int end = (int) (size.width * endPct);
+        swipe(start, anchor, end, anchor, milisDuration);
     }
 }

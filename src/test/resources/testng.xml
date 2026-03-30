@@ -6,6 +6,7 @@
             <class name="com.globant.mobile.tests.NavigationTest"/>
             <class name="com.globant.mobile.tests.SignUpTest"/>
             <class name="com.globant.mobile.tests.LoginTest"/>
+            <class name="com.globant.mobile.tests.SwipeTest"/>
         </classes>
     </test>
 </suite>
