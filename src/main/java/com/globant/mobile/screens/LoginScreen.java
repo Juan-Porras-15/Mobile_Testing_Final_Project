@@ -3,7 +3,6 @@ package com.globant.mobile.screens;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginScreen extends BaseScreen {
     @AndroidFindBy(accessibility = "Login-screen")
@@ -38,7 +37,7 @@ public class LoginScreen extends BaseScreen {
 
     // Alertas/Mensajes de éxito
     @AndroidFindBy(id = "android:id/message")
-    public WebElement successMessage;
+    public WebElement alertMessage;
 
     @AndroidFindBy(id = "android:id/button1")
     public WebElement okButton;
@@ -60,6 +59,39 @@ public class LoginScreen extends BaseScreen {
     }
 
     public String getSuccessAlertMessage() {
-        return wait.until(ExpectedConditions.visibilityOf(successMessage)).getText();
+
+        if (isElementVisible(alertMessage, 10)) {
+            return alertMessage.getText();
+        }
+        return "";
+    }
+
+    public void login(String email, String password) {
+        clickLoginTab();
+        sendKeysSafely(emailField, email, 10);
+        sendKeysSafely(passwordField, password, 10);
+        clickLoginButton();
+    }
+
+    public String getAlertMessageText() {
+        if (isElementVisible(alertMessage, 10)) {
+            return alertMessage.getText();
+        }
+        return "";
+    }
+
+    public LoginScreen createNewUser(String email, String password) {
+        ;
+        clickSignUpTab();
+        fillSignUpForm(email, password);
+        clickSignUpButton();
+
+        String alertText = this.getSuccessAlertMessage();
+        if (!alertText.equals("You successfully signed up!")) {
+            throw new RuntimeException("Error: No se mostró la alerta de éxito al crear el usuario.");
+        }
+
+        clickOkButton();
+        return this;
     }
 }
