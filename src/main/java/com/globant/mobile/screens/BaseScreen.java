@@ -60,6 +60,28 @@ public class BaseScreen {
         }
     }
 
+    /**
+     * Envía texto de forma segura a un elemento: espera visibilidad, limpia el campo y oculta el teclado.
+     * @param element El WebElement (Input)
+     * @param text El texto a escribir
+     * @param timeout Tiempo de espera en segundos
+     */
+    public void sendKeysSafely(WebElement element, String text, int timeout) {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+
+            element.clear();
+            element.sendKeys(text);
+
+            if (driver.isKeyboardShown()) {
+                driver.hideKeyboard();
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al enviar texto al elemento: " + e.getMessage());
+        }
+    }
+
     public HomeScreen clickHomeIcon() {
         homeIcon.click();
         return new HomeScreen(driver);
