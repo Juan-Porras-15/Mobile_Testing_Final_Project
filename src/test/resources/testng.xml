@@ -4,6 +4,7 @@
     <test name="Final Project Tests">
         <classes>
             <class name="com.globant.mobile.tests.NavigationTest"/>
+            <class name="com.globant.mobile.tests.SignUpTest"/>
         </classes>
     </test>
 </suite>
